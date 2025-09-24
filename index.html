@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>일정 관리</title>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+<style>
+  body { font-family: "Do Hyeon", sans-serif; display: flex; margin: 0; height: 100vh; background: #f7f7f7; }
+  .left { width: 30%; background: #fff; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+  .right { width: 70%; display: flex; flex-direction: column; padding: 20px; }
+  .card { background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+  input[type="text"] { padding: 8px; width: 70%; margin-right: 10px; border-radius: 6px; border: 1px solid #ccc; }
+  button { padding: 8px 12px; border: none; border-radius: 6px; background: #4caf50; color: white; cursor: pointer; }
+  ul { list-style: none; padding: 0; }
+  li { margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<!-- 왼쪽: 달력 -->
+<div class="left">
+  <h2>달력</h2>
+  <input type="date" id="calendar">
+</div>
+
+<!-- 오른쪽: 일정 추가 + 오늘 할 일 -->
+<div class="right">
+  <div class="card">
+    <h3>일정 추가</h3>
+    <input type="text" id="newTask" placeholder="할 일을 입력하세요">
+    <button onclick="addTask()">추가</button>
+  </div>
+
+  <div class="card">
+    <h3>오늘의 할 일</h3>
+    <ul id="taskList"></ul>
+  </div>
+</div>
+
+<script>
+  const taskList = document.getElementById("taskList");
+
+  // 페이지 로드 시 localStorage에서 불러오기
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  function updateList() {
+    taskList.innerHTML = "";
+    tasks.forEach((t, index) => {
+      const li = document.createElement("li");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = t.done;
+      checkbox.onclick = () => {
+        tasks[index].done = checkbox.checked;
+        saveTasks();
+        updateList();
+      };
+      li.appendChild(checkbox);
+      li.appendChild(document.createTextNode(" " + t.text));
+      if(t.done) li.style.textDecoration = "line-through";
+      taskList.appendChild(li);
+    });
+  }
+
+  function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  function addTask() {
+    const input = document.getElementById("newTask");
+    const text = input.value.trim();
+    if(!text) return alert("내용을 입력하세요!");
+    tasks.push({text: text, done: false});
+    saveTasks();
+    updateList();
+    input.value = "";
+  }
+
+  // 초기 리스트 업데이트
+  updateList();
+</script>
+
+</body>
+</html>
+
