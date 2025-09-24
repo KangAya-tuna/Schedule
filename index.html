@@ -14,13 +14,29 @@
     padding: 20px;
     background: #f7f7f7;
   }
+  .calendar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
   input[type="date"] {
     font-family: "Do Hyeon", sans-serif;
     font-size: 30px;
     padding: 10px;
-    margin-bottom: 20px;
     border-radius: 6px;
     border: 1px solid #ccc;
+  }
+  button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #4caf50;
+    color: white;
+    cursor: pointer;
+  }
+  .delete {
+    background: #f44336;
   }
   .right {
     width: 50%;
@@ -34,7 +50,7 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     padding: 20px;
     margin-bottom: 20px;
-    font-weight: normal; /* 볼드 제거 */
+    font-weight: normal;
   }
   input[type="text"] {
     padding: 8px;
@@ -42,20 +58,6 @@
     margin-right: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    font-weight: normal; /* 볼드 제거 */
-  }
-  button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    background: #4caf50;
-    color: white;
-    cursor: pointer;
-    margin-right: 5px;
-    font-weight: normal; /* 볼드 제거 */
-  }
-  button.delete {
-    background: #f44336;
   }
   ul {
     list-style: none;
@@ -63,16 +65,20 @@
   }
   li {
     margin: 8px 0;
-    font-weight: normal; /* 볼드 제거 */
+    font-weight: normal;
   }
 </style>
 </head>
 <body>
 
-<!-- 달력 -->
-<input type="date" id="calendar">
+<!-- 달력 + 날짜 넘기기 -->
+<div class="calendar-container">
+  <button onclick="changeDate(-1)">◀ 이전</button>
+  <input type="date" id="calendar">
+  <button onclick="changeDate(1)">다음 ▶</button>
+</div>
 
-<!-- 오른쪽: 일정 관리 -->
+<!-- 일정 관리 -->
 <div class="right">
   <div class="card">
     <h3>일정 추가 / 삭제</h3>
@@ -89,6 +95,11 @@
 
 <script>
   const taskList = document.getElementById("taskList");
+  const calendar = document.getElementById("calendar");
+
+  // 오늘 날짜로 초기화
+  const today = new Date();
+  calendar.value = today.toISOString().split('T')[0];
 
   // localStorage에서 불러오기
   let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -144,6 +155,13 @@
       saveTasks();
       updateList();
     }
+  }
+
+  // 날짜 변경 함수
+  function changeDate(days) {
+    let current = new Date(calendar.value);
+    current.setDate(current.getDate() + days);
+    calendar.value = current.toISOString().split('T')[0];
   }
 
   // 초기 리스트 업데이트
