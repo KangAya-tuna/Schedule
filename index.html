@@ -173,47 +173,12 @@
   <button onclick="addImageCard()">추가</button>
   <div id="imageCards"></div>
 </div>
-
-<script>
-const imageCardsContainer = document.getElementById("imageCards");
-
-function addImageCard() {
-  const fileInput = document.getElementById("imageFile");
-  const file = fileInput.files[0];
-  if(!file) return alert("이미지를 선택해주세요!");
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const cardDiv = document.createElement("div");
-    cardDiv.className = "card";
-    cardDiv.style.textAlign = "center";
-    cardDiv.style.marginBottom = "10px";
-
-    const img = document.createElement("img");
-    img.src = e.target.result;  // 선택한 파일의 데이터 URL
-    img.style.maxWidth = "100%";
-    img.style.borderRadius = "8px";
-    img.alt = "이미지 카드";
-
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "삭제";
-    delBtn.className = "delete";
-    delBtn.onclick = () => {
-      imageCardsContainer.removeChild(cardDiv);
-    };
-
-    cardDiv.appendChild(img);
-    cardDiv.appendChild(delBtn);
-    imageCardsContainer.appendChild(cardDiv);
-  };
-
-  reader.readAsDataURL(file);  // 파일 읽기
-  fileInput.value = "";  // 선택 초기화
-}
+  
 </script>
 
 </body>
 </html>
+
 
 
 
