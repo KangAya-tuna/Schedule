@@ -11,22 +11,11 @@
     margin: 0;
     height: 100vh;
     background: #f7f7f7;
-  }
-  .left {
-    width: 30%;
-    background: #fff;
-    padding: 40px 20px;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  .left input[type="date"] {
-    font-family: "Do Hyeon", sans-serif;
-    font-size: 30px;
-    padding: 10px;
-    width: 90%;
+    justify-content: center;
+    align-items: center;
   }
   .right {
-    width: 70%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -68,12 +57,6 @@
 </head>
 <body>
 
-<!-- 왼쪽: 달력 -->
-<div class="left">
-  <h2>📅 달력</h2>
-  <input type="date" id="calendar">
-</div>
-
 <!-- 오른쪽: 일정 관리 -->
 <div class="right">
   <div class="card">
@@ -87,70 +70,4 @@
     <h3>✅ 오늘의 할 일</h3>
     <ul id="taskList"></ul>
   </div>
-</div>
-
-<script>
-  const taskList = document.getElementById("taskList");
-
-  // localStorage에서 불러오기
-  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-  function updateList() {
-    taskList.innerHTML = "";
-    tasks.forEach((t, index) => {
-      const li = document.createElement("li");
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = t.done;
-      checkbox.onclick = () => {
-        tasks[index].done = checkbox.checked;
-        saveTasks();
-        updateList();
-      };
-      li.appendChild(checkbox);
-      li.appendChild(document.createTextNode(" " + t.text));
-      if(t.done) li.style.textDecoration = "line-through";
-
-      // 개별 삭제 버튼
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "삭제";
-      delBtn.className = "delete";
-      delBtn.onclick = () => {
-        tasks.splice(index, 1);
-        saveTasks();
-        updateList();
-      };
-      li.appendChild(delBtn);
-
-      taskList.appendChild(li);
-    });
-  }
-
-  function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }
-
-  function addTask() {
-    const input = document.getElementById("newTask");
-    const text = input.value.trim();
-    if(!text) return alert("내용을 입력하세요!");
-    tasks.push({text: text, done: false});
-    saveTasks();
-    updateList();
-    input.value = "";
-  }
-
-  function deleteAll() {
-    if(confirm("모든 일정을 삭제하시겠습니까?")) {
-      tasks = [];
-      saveTasks();
-      updateList();
-    }
-  }
-
-  // 초기 리스트 업데이트
-  updateList();
-</script>
-
-</body>
-</html>
+</div
